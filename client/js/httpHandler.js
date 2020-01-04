@@ -34,6 +34,7 @@
     $.ajax({
       type: 'POST',
       data: formData,
+      // data: "abcdefghij",
       url: serverUrl,
       cache: false,
       contentType: false,
@@ -65,6 +66,6 @@
 
   });
 
-  setInterval( () => getCommands() , 1000);
+  // setInterval( () => getCommands() , 1000);
 
 })();
