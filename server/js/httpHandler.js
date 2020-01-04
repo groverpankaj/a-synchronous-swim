@@ -9,7 +9,7 @@ const messagesArr = messagesQueue.messagesArr;
 
 
 // Path for the background image ///////////////////////
-module.exports.backgroundImageFile = path.join('.', 'background.jpg');
+backgroundImageFile = path.join('.', 'background.jpg');
 ////////////////////////////////////////////////////////
 
 let messageQueue = null;
@@ -18,23 +18,34 @@ module.exports.initialize = (queue) => {
 };
 
 module.exports.router = (req, res, next = ()=>{}) => {
-  // console.log('Serving request type ' + req.method + ' for url ' + req.url);
-  // console.log(req.url);
+  console.log('Serving request type ' + req.method + ' for url ' + req.url );
+  // console.log(req.headers);
   let reqData = req.url.slice(2);
-  
+
   if (reqData === 'swim' || (reqData === '') ) {
     let firstQueueEle = messagesQueue.dequeue();
     res.writeHead(200, headers);
     res.end(JSON.stringify(firstQueueEle));
     next(); // invoke next() at the end of a request to help with testing!
   } else {
-    res.writeHead(404, headers);
-    res.end();
-    next();
-
+    // res.writeHead(404, headers);
+    // res.end();
+    // next();
+    var type = "image/jpeg";
+    var file = backgroundImageFile;
+    console.log(file);
+    var stream = fs.createReadStream(file);
+    stream.on('open', function() {
+      res.setHeader('Content-Type', type);
+      stream.pipe(res);
+    });
+    stream.on('error',function() {
+      res.setHeader('Content-Type', 'text/plain');
+      res.statusCode = 404;
+      res.end('Not found');
+    });
 
       // var body = "";
-      // console.log("INSIDE")
       // req.on('data', function (chunk) {
       //   body += chunk;
       // });
