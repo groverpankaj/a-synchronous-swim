@@ -5,7 +5,22 @@
   //
   // TODO: build the swim command fetcher here
   //
+  const getCommands = () => {
 
+    $.ajax({
+      type: 'GET',
+      url: serverUrl,
+      data: 'swim',
+      success: (response) => {
+        console.log("RES" , response);
+        if(response) {
+          let command = JSON.parse(response);
+          SwimTeam.move(command.toLowerCase());
+        }
+      }
+    });
+
+  }
 
 
   /////////////////////////////////////////////////////////////////////
@@ -49,5 +64,7 @@
 
 
   });
+
+  setInterval( () => getCommands() , 1000);
 
 })();
